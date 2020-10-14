@@ -11,6 +11,9 @@ public class GameFrame extends Frame {
 		ActionCanvas canvas = new ActionCanvas();
 		canvas.start();
 		
+		
+		
+		System.out.println(hasFocus());
 		setSize(360, 600);
 		setVisible(true);	
 		add(canvas);

@@ -15,8 +15,17 @@ public class Background extends Item{
 	private int height = 1200;
 	
 	private static Image img;
+	//private BackgroundMoveListener bgMoveListener;
+	private int vx = 0;
+	private int vy = 0;
+	
+	
+/*
+	public void setBgMoveListener(BackgroundMoveListener bgMoveListener) {
+		this.bgMoveListener = bgMoveListener;
+	}*/
 
-	static {// ½ºÅÂÆ½ »ı¼ºÀÚ. ÇÁ·Î±×·¥ÀÌ ·Îµå µÉ¶§ µü ÇÑ¹ø¸¸ ¼öÇàµÇ´Â Àü¿ª »ı¼ºÀÚ
+	static {// ìŠ¤íƒœí‹± ìƒì„±ì. í”„ë¡œê·¸ë¨ì´ ë¡œë“œ ë ë•Œ ë”± í•œë²ˆë§Œ ìˆ˜í–‰ë˜ëŠ” ì „ì—­ ìƒì„±ì
 		try {
 			img = ImageIO.read(new File("res/space.jpg"));
 		} catch (IOException e) {
@@ -46,9 +55,16 @@ public class Background extends Item{
 		Image img = this.getImg();
 		double x = this.getX();
 		double y = this.getY() + (ActionCanvas.instance.getHeight() - height);
+		
+		if(vx !=0 || vy != 0) {
+			x += vx;
+			y += vy;
+		}
 
 		g.drawImage(img, (int) x, (int) y, ActionCanvas.instance);
 		g.drawImage(img, (int) x, (int) y - (height), ActionCanvas.instance);
+		vx = 0;
+		vy = 0;
 	}
 
 	@Override
@@ -63,6 +79,23 @@ public class Background extends Item{
 		double dy = this.getDy();
 		if (dy - 1 <= y && y <= dy + 1)
 			this.setY(0);
+		
+		/*
+		if(bgMoveListener != null) {
+			bgMoveListener.moveImg();
+			bgMoveListener = null;
+		}*/
 	}
+
+	public void setVx(int vx) {
+		this.vx = vx;
+	}
+
+	public void setVy(int vy) {
+		this.vy = vy;
+	}
+
+	
+	
 
 }

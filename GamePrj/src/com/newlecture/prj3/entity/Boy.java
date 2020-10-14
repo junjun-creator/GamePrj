@@ -14,7 +14,7 @@ public class Boy extends Item {
 	//	private double x;
 	//	private double y;
 	//	
-	//	// ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ º¯¼ö
+	//	// ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ ë³€ìˆ˜
 	//	private double vx;
 	//	private double vy;
 	//	private double dx;
@@ -28,9 +28,25 @@ public class Boy extends Item {
 	//	private int speed = 3;
 	//	private int walkTempo = 6;
 	
+	private static final int UP = 38; // ì „ì—­ë³€ìˆ˜ë¡œ ë§Œë“¬ static
+	private static final int DOWN = 40;
+	private static final int LEFT = 37;
+	private static final int RIGHT = 39;
+	
+	private int N = 0;
+	private int S = 0;
+	private int W = 0;
+	private int E = 0;
+	
 	private static Image img;
 	
-	static {//½ºÅÂÆ½ »ı¼ºÀÚ. ÇÁ·Î±×·¥ÀÌ ·Îµå µÉ¶§ µü ÇÑ¹ø¸¸ ¼öÇàµÇ´Â Àü¿ª »ı¼ºÀÚ
+	private BackgroundMoveListener bgMoveListener;
+	
+	public void setBgMoveListener(BackgroundMoveListener bgMoveListener) {
+		this.bgMoveListener = bgMoveListener;
+	}
+	
+	static {//ìŠ¤íƒœí‹± ìƒì„±ì. í”„ë¡œê·¸ë¨ì´ ë¡œë“œ ë ë•Œ ë”± í•œë²ˆë§Œ ìˆ˜í–‰ë˜ëŠ” ì „ì—­ ìƒì„±ì
 		try {
 			img = ImageIO.read(new File("res/boy.png"));
 		} catch (IOException e) {
@@ -60,14 +76,14 @@ public class Boy extends Item {
 	//		this.dx = x;
 	//		this.dy = y;
 	//		
-	//		// µ¿ÀÏÇÑ ¼Óµµ·Î ÀÌµ¿ÇÏ´Â ´ÜÀ§º¤ÅÍ
+	//		// ë™ì¼í•œ ì†ë„ë¡œ ì´ë™í•˜ëŠ” ë‹¨ìœ„ë²¡í„°
 	//		double w = this.dx - this.x;
 	//		double h = this.dy - this.y;
 	//		double d = Math.sqrt(w*w + h*h);
 	//		this.vx = w/d*speed;
 	//		this.vy = h/d*speed;
 	//		
-	//		// µ¿ÀÏÇÑ ½Ã°£³»¿¡ ÀÌµ¿ÇÏ´Â ´ÜÀ§º¤ÅÍ
+	//		// ë™ì¼í•œ ì‹œê°„ë‚´ì— ì´ë™í•˜ëŠ” ë‹¨ìœ„ë²¡í„°
 	//		//this.vx = (this.dx - this.x) / 15;
 	//		//this.vy = (this.dy - this.y) / 15;
 	//		
@@ -82,6 +98,17 @@ public class Boy extends Item {
 	}
 
 	public void update() {
+		
+		if(N == 1)
+			this.setY(this.getY()-1);
+		if(S == 1)
+			this.setY(this.getY()+1);
+		if(E == 1)
+			this.setX(this.getX()-1);
+		if(W == 1)
+			this.setX(this.getX()+1);
+		//System.out.println(getX());
+		
 		double x = getX();
 		double y = getY();
 		double dx = getDx();
@@ -90,15 +117,29 @@ public class Boy extends Item {
 		double vy = getVy();
 		int movIndex = getMovIndex();
 
-		// ¸ñÀûÁö¿¡ ¹Ú½º¸¦ ¸¸µé¾î ³õ°í ºñ±³
-		if((dx - 1 <= x && x <= dx + 1) && 
-				(dy - 1 <= y && y <= dy + 1)) {			
+		// ëª©ì ì§€ì— ë°•ìŠ¤ë¥¼ ë§Œë“¤ì–´ ë†“ê³  ë¹„êµ
+		if(((dx - 1 <= x && x <= dx + 1) && 
+				(dy - 1 <= y && y <= dy + 1))) {			
 			//		if((this.x - 1 <= this.dx && this.dx <= this.x + 1) && 
 			//				(this.y - 1 <= this.dy && this.dy <= this.y + 1)) {
+			//System.out.println("111111111111111");
 			vx = 0;
 			vy = 0;
 			movIndex = 0;
 		}
+		/*
+		int canvasWidth = ActionCanvas.instance.getWidth();
+		
+		if(x >= canvasWidth - this.getWidth() -1 && x <= canvasWidth-this.getWidth() + 1) {
+			System.out.println("x = 0");
+			this.setVx(0);
+			vx = getVx();
+		}
+		
+		if(y == ActionCanvas.instance.getHeight()-this.getHeight()) {
+			this.setVy(0);
+			vy = getVy();
+		}*/
 
 		x += vx;
 		y += vy;
@@ -108,7 +149,6 @@ public class Boy extends Item {
 		this.setVx(vx);
 		this.setVy(vy);
 		this.setMovIndex(movIndex);
-
 	}
 
 	
@@ -126,8 +166,9 @@ public class Boy extends Item {
 		Image img = getImg();
 		double vx = getVx();
 		double vy = getVy();
-
-		if(vx != 0 || vy != 0) {
+		
+		if(vx != 0 || vy != 0 || N == 1 || S == 1 || W == 1 || E == 1) {
+			//System.out.println("test");
 			if(walkTempo == 0) {
 				movIndex++;
 				movIndex = movIndex % 4;
@@ -159,5 +200,78 @@ public class Boy extends Item {
 				&& (y1 < y && y < y2))
 			return true;
 		return false;
+	}
+
+	public void move(int key) {
+		double x = this.getX();
+		double y = this.getY();
+		int canvasWidth = ActionCanvas.instance.getWidth();
+		int canvasHeight = ActionCanvas.instance.getHeight();
+		
+		switch(key) {
+		case UP ://case ê°’ì€ ìƒìˆ˜ê°’(ë³€ìˆ˜ x)ë§Œ ì™€ì•¼í•¨. final ë³€ìˆ˜ê°€ ì™€ì•¼í•¨
+			/*
+			if(this.getY() >= 0 +this.getHeight() -1 && this.getY() <= 0+this.getHeight()  + 1) {
+				this.move(this.getX(),y);
+				double bx = 0;
+				double by = 3;
+				bgMoveListener.moveImg(bx,by);//
+				break;
+			}
+			this.move(x,y-3);*/
+			N = 1;
+			break;
+		case DOWN :
+			/*
+			if(this.getY() >= canvasHeight -1 && this.getY() <= canvasHeight + 1) {
+				this.move(this.getX(),y);
+				double bx = 0;
+				double by = -3;
+				bgMoveListener.moveImg(bx,by);
+				break;
+			}
+			this.move(x,y+3);*/
+			S = 1;
+			break;
+		case LEFT :/*
+			if(this.getX() >= canvasWidth/3 + this.getWidth()/2 -1 && this.getX() <= canvasWidth/3 + this.getWidth()/2 + 1) {
+				this.move(this.getX(),y);
+				double bx = 3;
+				double by = 0;
+				bgMoveListener.moveImg(bx,by);//ë°”ìš´ë”ë¦¬ì— ë„ì°©í–ˆë‹¤ë¼ëŠ”ê²ƒì„ ì•Œë¦¼
+				break;
+			}
+			this.move(x-3,y);*/
+			E = 1;
+			break;
+		case RIGHT :/*
+			if(this.getX() >= canvasWidth-canvasWidth/3 - this.getWidth()/2 -1 && this.getX() <= canvasWidth-canvasWidth/3- this.getWidth()/2 + 1) {
+				this.move(this.getX(),y);
+				double bx = -3;
+				double by = 0;
+				bgMoveListener.moveImg(bx,by);
+				break;
+			}
+			this.move(x+3,y);*/
+			W = 1;
+			break;
+		}
+	}
+
+	public void upMove(int key) {
+		switch(key) {
+		case UP :
+			N = 0;
+			break;
+		case DOWN :
+			S = 0;
+			break;
+		case LEFT :
+			E = 0;
+			break;
+		case RIGHT :
+			W = 0;
+			break;
+		}
 	}
 }

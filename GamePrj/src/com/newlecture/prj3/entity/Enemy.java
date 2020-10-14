@@ -15,7 +15,7 @@ public class Enemy extends Item {
 	//	private double x;
 	//	private double y;
 	//	
-	//	// ¾Ö´Ï¸ŞÀÌ¼ÇÀ» À§ÇÑ º¯¼ö
+	//	// ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ ë³€ìˆ˜
 	//	private double vx;
 	//	private double vy;
 	//	private double dx;
@@ -33,7 +33,18 @@ public class Enemy extends Item {
 	
 	private static Image img;
 	
-	static {//½ºÅÂÆ½ »ı¼ºÀÚ. ÇÁ·Î±×·¥ÀÌ ·Îµå µÉ¶§ µü ÇÑ¹ø¸¸ ¼öÇàµÇ´Â Àü¿ª »ı¼ºÀÚ
+	
+	
+	private EnemyMoveListener moveListener;
+	
+	public void setMoveListener(EnemyMoveListener moveListener) {
+		this.moveListener = moveListener;
+	}
+
+	
+	
+	
+	static {//ìŠ¤íƒœí‹± ìƒì„±ì. í”„ë¡œê·¸ë¨ì´ ë¡œë“œ ë ë•Œ ë”± í•œë²ˆë§Œ ìˆ˜í–‰ë˜ëŠ” ì „ì—­ ìƒì„±ì
 		try {
 			img = ImageIO.read(new File("res/enemy.gif"));
 		} catch (IOException e) {
@@ -71,14 +82,14 @@ public class Enemy extends Item {
 	//		this.dx = x;
 	//		this.dy = y;
 	//		
-	//		// µ¿ÀÏÇÑ ¼Óµµ·Î ÀÌµ¿ÇÏ´Â ´ÜÀ§º¤ÅÍ
+	//		// ë™ì¼í•œ ì†ë„ë¡œ ì´ë™í•˜ëŠ” ë‹¨ìœ„ë²¡í„°
 	//		double w = this.dx - this.x;
 	//		double h = this.dy - this.y;
 	//		double d = Math.sqrt(w*w + h*h);
 	//		this.vx = w/d*speed;
 	//		this.vy = h/d*speed;
 	//		
-	//		// µ¿ÀÏÇÑ ½Ã°£³»¿¡ ÀÌµ¿ÇÏ´Â ´ÜÀ§º¤ÅÍ
+	//		// ë™ì¼í•œ ì‹œê°„ë‚´ì— ì´ë™í•˜ëŠ” ë‹¨ìœ„ë²¡í„°
 	//		//this.vx = (this.dx - this.x) / 15;
 	//		//this.vy = (this.dy - this.y) / 15;
 	//		
@@ -102,7 +113,10 @@ public class Enemy extends Item {
 			int y = rand.nextInt(h)+(int)this.getHeight()/2;
 
 			this.move(x,y);
-
+			// move í•  ë•Œ ë­ë¼ë„ ì—¬ê¸°ì—ì„œ ì½”ë“œë¥¼ ë„£ê³  ì‹¶ì§€ ì•Šì„ê¹Œ? ë¼ëŠ” ê°€ì •
+			if(moveListener != null)
+				moveListener.onMove();// ë‹ˆê°€ êµ¬í˜„í•´ ë‚´ê°€ í˜¸ì¶œí•´ì¤„ê²Œ!
+			//íœ´ëŒ€í° ì´ì–´í° í¬íŠ¸ëŠ” íœ´ëŒ€í° ë§Œë“œëŠ”ê³³ì—ì„œ ì•½ì†ì„ ì§€ì •í•´ë‘ê³ (íœ´ëŒ€í°ì— ì´ëŸ¬í•œ ê¸°ëŠ¥ì„ ë§Œë“¤ê±°ì•¼), ê·¸ í¬íŠ¸ë¥¼ ë§Œë“œëŠ” ìª½ì—ì„œëŠ” ì•Œì•„ì„œ ë§Œë“¤ë„ë¡ í•¨(ë‹ˆê°€ êµ¬í˜„í•´)
 			
 			timeoutForMoving = rand.nextInt(60)+60;//0~59+60 // 60~119
 		
@@ -115,7 +129,7 @@ public class Enemy extends Item {
 		double vx = getVx();
 		double vy = getVy();
 		int movIndex = getMovIndex();
-		// ¸ñÀûÁö¿¡ ¹Ú½º¸¦ ¸¸µé¾î ³õ°í ºñ±³
+		// ëª©ì ì§€ì— ë°•ìŠ¤ë¥¼ ë§Œë“¤ì–´ ë†“ê³  ë¹„êµ
 		if((dx - 1 <= x && x <= dx + 1) && 
 				(dy - 1 <= y && y <= dy + 1)) {
 			vx = 0;

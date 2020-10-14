@@ -4,10 +4,17 @@ import java.awt.Canvas;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import com.newlecture.prj3.entity.Background;
+import com.newlecture.prj3.entity.BackgroundMoveListener;
 import com.newlecture.prj3.entity.Boy;
 import com.newlecture.prj3.entity.Enemy;
+import com.newlecture.prj3.entity.EnemyMoveListener;
+import com.newlecture.prj3.entity.EnemyMoveListenerImpl;
 import com.newlecture.prj3.entity.Item;
 
 public class ActionCanvas extends Canvas {
@@ -25,18 +32,25 @@ public class ActionCanvas extends Canvas {
 
 	private Item[] items;
 	private int itemSize = 0;
-	
-	private static final int up = 1004; // Àü¿ªº¯¼ö·Î ¸¸µë static
+	/*
+	private static final int up = 1004; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ static
 	private static final int down = 1005;
 	private static final int left = 1006;
-	private static final int right = 1007;
+	private static final int right = 1007;*/
 
 	public ActionCanvas() {
 		instance = this;
 
 		enemy = new Enemy();
+		enemy.setMoveListener(new EnemyMoveListener() {//ìµëª… í´ë˜ìŠ¤
+			
+			@Override
+			public void onMove() {
+				System.out.println("ì˜¤í˜¸ë¼ë””ì•¼~~");
+			}
+		});
 
-		// Boy¸¦ »ı¼º
+		// Boyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		boys = new Boy[3];
 
 		boy1 = new Boy(100,200);
@@ -58,6 +72,81 @@ public class ActionCanvas extends Canvas {
 		itemSize = 5;
 
 		currentBoy = boy1;
+		
+		currentBoy.setBgMoveListener(new BackgroundMoveListener() {
+			@Override
+			public void moveImg(double bx, double by) {
+				double backX = background.getX();
+				double backY = background.getY();
+				
+				backX += bx;
+				backY += by;
+				
+				background.setX(backX);
+				background.setY(backY);
+			}
+		});
+		
+		
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				for(int i=0; i<3; i++)
+					if(boys[i].isSelected(e.getX(), e.getY())) {
+						currentBoy = boys[i];
+					}
+				currentBoy.move(e.getX(), e.getY());
+				//System.out.println(e.getX());
+				repaint();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});//ì¸í„°í˜ì´ìŠ¤
+		
+		setFocusable(true);
+		addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+				if(currentBoy == null)
+					currentBoy = boy1;
+				currentBoy.upMove(e.getKeyCode());
+				System.out.println(e.getKeyCode());
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				currentBoy.move(e.getKeyCode());
+			}
+		});
 	}
 
 	public void start() {
@@ -80,7 +169,7 @@ public class ActionCanvas extends Canvas {
 
 
 					repaint();
-					// -> Canvas.update() : Áö¿ì±â -> Canvas.paint(g) -> ´Ù½Ã ±×¸®±â
+					// -> Canvas.update() : ï¿½ï¿½ï¿½ï¿½ï¿½ -> Canvas.paint(g) -> ï¿½Ù½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 
 					//System.out.println("repaint");
 
@@ -99,12 +188,12 @@ public class ActionCanvas extends Canvas {
 		th.start();
 
 	}
-
+/*
 	@Override
 	public boolean mouseDown(Event evt, int x, int y) {
 
 		//		boolean ?;
-		//		for(3¹ø)
+		//		for(3ï¿½ï¿½)
 		//			if()
 		//				? = ;
 		for(int i=0; i<3; i++)
@@ -128,49 +217,33 @@ public class ActionCanvas extends Canvas {
 
 		currentBoy.move(x, y);
 
-		// ? == true ¼¼ ¼Ò³â¿¡°Ô ¸ğµÎ ¹°¾úÀ» ¶§ ¸ğµÎ°¡ ¼±ÅÃÀÌ µÈÀûÀÌ ¾ø´Ù¸é.
-		// ¼±ÅÃµÈ ¼Ò³âÀ» ÀÌµ¿ currentBoy.move(x, y);
+		// ? == true ï¿½ï¿½ ï¿½Ò³â¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½.
+		// ï¿½ï¿½ï¿½Ãµï¿½ ï¿½Ò³ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ currentBoy.move(x, y);
 		//else
-		// ¼±ÅÃÀ» º¯°æ		
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½		
 
 		repaint();
 		return super.mouseDown(evt, x, y);
-	}
-	
+	}*/
+	/*
 	@Override
 	public boolean keyDown(Event arg0, int key) {
-		
-		System.out.println(key);
-		
-		double y;
-		
-		switch(key) {
-		case up ://case °ªÀº »ó¼ö°ª(º¯¼ö x)¸¸ ¿Í¾ßÇÔ. final º¯¼ö°¡ ¿Í¾ßÇÔ
-			y = currentBoy.getY();
-			y--;
-			currentBoy.setY(y);
-			break;
-		case down :
-			y = currentBoy.getY();
-			y++;
-			currentBoy.setY(y);
-			break;
-		case left :
-			//currentBoy.¿ŞÂÊÀ¸·Î°¡();
-			break;
-		case right :
-			//currentBoy.¿À¸¥ÂÊÀ¸·Î°¡();
-			break;
-		}
-		
-		return super.keyDown(arg0, key);
-	}
 
+		System.out.println(1);
+		
+		currentBoy.move(key);
+		
+		
+
+	
+		return super.keyDown(arg0, key);
+	}*/
+/*
 	@Override
 	public boolean keyUp(Event evt, int key) {
-		System.out.println(key);
+		currentBoy.upMove(key);
 		return super.keyUp(evt, key);
-	}
+	}*/
 
 	@Override
 	public void update(Graphics g) {
@@ -197,12 +270,12 @@ public class ActionCanvas extends Canvas {
 	}
 }
 
-// 1. ¼Ò³âÀ» »ı¼ºÇÒ ¶§ À§Ä¡¸¦ ÃÊ±âÈ­ÇÒ ¼ö ÀÖ°Ô ÇÏ¶ó.
-// 2. ¼¼ ¸íÀÇ ¼Ò³âÀ» ¶ç¿ö¶ó
-// 3. »ç¿ëÀÚ ÀÔ·ÂÃ³¸® : ¸¶¿ì½º·Î Å¬¸¯ÇÏ¸é ±× À§Ä¡·Î 1¹øÂ° ¼Ò³âÀ» ÀÌµ¿½ÃÅ°½Ã¿À.
-// 4. (x,y)°¡ ¼Ò³âÀÇ ÁÂ/»ó´ÜÀÌ ÀÌµ¿ÀÇ Áß½ÉÁÂÇ¥°¡ µÈ´Ù. 
-//     ÀÌ°ÍÀ» Áß½É/ÇÏ´ÜÀÌ µÇµµ·Ï Body.paint ¸Ş¼Òµå¸¦ ¼öÁ¤ÇØ¼­ º¸Á¤ÇÏ½Ã¿À.
-// 5. Boy ÇÑÅ× ÁÂÇ¥¸¦ ÁÖ¸é¼­ ³×°¡ ¼±ÅÃµÇ¾ú´Ï? isSelected(x, y):true/false -> trueÀÏ °æ¿ì 
-//    isSelected()ÀÇ ¹İÈ¯ °ªÀÌ true ÀÏ°æ¿ì -> currentBoy.move(x, y)
-// 6. ³ª¹«, ÀÚµ¿Â÷, ±øÅë, ·Îº¿....ÀÌµç »õ·Î¿î °³Ã¼ ÇÏ³ª¸¦ µîÀå½ÃÅ°½Ã¿À.
+// 1. ï¿½Ò³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ï¶ï¿½.
+// 2. ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+// 3. ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½Ã³ï¿½ï¿½ : ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ 1ï¿½ï¿½Â° ï¿½Ò³ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å°ï¿½Ã¿ï¿½.
+// 4. (x,y)ï¿½ï¿½ ï¿½Ò³ï¿½ï¿½ï¿½ ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½È´ï¿½. 
+//     ï¿½Ì°ï¿½ï¿½ï¿½ ï¿½ß½ï¿½/ï¿½Ï´ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½ Body.paint ï¿½Ş¼Òµå¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã¿ï¿½.
+// 5. Boy ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Ö¸é¼­ ï¿½×°ï¿½ ï¿½ï¿½ï¿½ÃµÇ¾ï¿½ï¿½ï¿½? isSelected(x, y):true/false -> trueï¿½ï¿½ ï¿½ï¿½ï¿½ 
+//    isSelected()ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ true ï¿½Ï°ï¿½ï¿½ -> currentBoy.move(x, y)
+// 6. ï¿½ï¿½ï¿½ï¿½, ï¿½Úµï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½Îºï¿½....ï¿½Ìµï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ã¼ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½Ã¿ï¿½.
 

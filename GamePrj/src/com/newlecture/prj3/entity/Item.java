@@ -4,12 +4,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import com.newlecture.prj2.canvas.ActionCanvas;
+
 public abstract class Item {
 
 	private double x;
 	private double y;
 
-	// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» À§ÇÑ º¯¼ö
+	// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private double vx;
 	private double vy;
 	private double dx;
@@ -41,7 +43,7 @@ public abstract class Item {
 
 	}
 
-	protected abstract Image getImage();//ÀÚ½Ä¿¡°Ô¸¸ Á¢±Ù °¡´ÉÇÏµµ·Ï
+	protected abstract Image getImage();
 	
 	public void move(double x, double y) {
 		//		this.x = x;
@@ -49,7 +51,6 @@ public abstract class Item {
 		this.dx = x;
 		this.dy = y;
 
-		// µ¿ÀÏÇÑ ¼Óµµ·Î ÀÌµ¿ÇÏ´Â ´ÜÀ§º¤ÅÍ
 		double w = this.dx - this.x;
 		double h = this.dy - this.y;
 		double d = Math.sqrt(w*w + h*h);
