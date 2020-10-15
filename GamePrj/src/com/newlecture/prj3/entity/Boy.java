@@ -98,14 +98,16 @@ public class Boy extends Item {
 	}
 
 	public void update() {
+		int canvasWidth = ActionCanvas.instance.getWidth();
+		int canvasHeight = ActionCanvas.instance.getHeight();
 		
-		if(N == 1)
+		if(N == 1 )
 			this.setY(this.getY()-1);
 		if(S == 1)
 			this.setY(this.getY()+1);
-		if(E == 1)
+		if(E == 1  && this.getX() > 0 + this.getWidth()/2 -1)
 			this.setX(this.getX()-1);
-		if(W == 1)
+		if(W == 1 && this.getX() < canvasWidth - this.getWidth()/2 + 1)
 			this.setX(this.getX()+1);
 		//System.out.println(getX());
 		
@@ -127,6 +129,9 @@ public class Boy extends Item {
 			vy = 0;
 			movIndex = 0;
 		}
+		
+		if((S == 0 && W == 0 && N == 0 && E == 0))
+			movIndex =0;
 		/*
 		int canvasWidth = ActionCanvas.instance.getWidth();
 		
@@ -205,54 +210,47 @@ public class Boy extends Item {
 	public void move(int key) {
 		double x = this.getX();
 		double y = this.getY();
+		
 		int canvasWidth = ActionCanvas.instance.getWidth();
 		int canvasHeight = ActionCanvas.instance.getHeight();
 		
+		//System.out.println(key);
+		System.out.println(S);
+		System.out.println(W);
 		switch(key) {
 		case UP ://case 값은 상수값(변수 x)만 와야함. final 변수가 와야함
-			/*
 			if(this.getY() >= 0 +this.getHeight() -1 && this.getY() <= 0+this.getHeight()  + 1) {
-				this.move(this.getX(),y);
 				double bx = 0;
 				double by = 3;
-				bgMoveListener.moveImg(bx,by);//
-				break;
+				bgMoveListener.moveImg(bx,by);
 			}
-			this.move(x,y-3);*/
 			N = 1;
 			break;
 		case DOWN :
-			/*
 			if(this.getY() >= canvasHeight -1 && this.getY() <= canvasHeight + 1) {
-				this.move(this.getX(),y);
 				double bx = 0;
 				double by = -3;
 				bgMoveListener.moveImg(bx,by);
-				break;
 			}
-			this.move(x,y+3);*/
 			S = 1;
 			break;
-		case LEFT :/*
-			if(this.getX() >= canvasWidth/3 + this.getWidth()/2 -1 && this.getX() <= canvasWidth/3 + this.getWidth()/2 + 1) {
-				this.move(this.getX(),y);
+		case LEFT :
+			if(x <= 0 + this.getWidth()/2 + 1) {
+				//this.move(this.getX(),y);
 				double bx = 3;
 				double by = 0;
 				bgMoveListener.moveImg(bx,by);//바운더리에 도착했다라는것을 알림
-				break;
 			}
-			this.move(x-3,y);*/
 			E = 1;
 			break;
-		case RIGHT :/*
-			if(this.getX() >= canvasWidth-canvasWidth/3 - this.getWidth()/2 -1 && this.getX() <= canvasWidth-canvasWidth/3- this.getWidth()/2 + 1) {
-				this.move(this.getX(),y);
+		case RIGHT :
+			//System.out.println(this.getX());
+			if(x >= 0 + canvasWidth - this.getWidth()/2 -1) {
+				System.out.println(1);
 				double bx = -3;
 				double by = 0;
 				bgMoveListener.moveImg(bx,by);
-				break;
 			}
-			this.move(x+3,y);*/
 			W = 1;
 			break;
 		}
@@ -270,6 +268,7 @@ public class Boy extends Item {
 			E = 0;
 			break;
 		case RIGHT :
+			System.out.println(W);
 			W = 0;
 			break;
 		}

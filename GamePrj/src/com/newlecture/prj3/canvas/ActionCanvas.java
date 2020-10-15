@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.newlecture.prj3.entity.Background;
 import com.newlecture.prj3.entity.BackgroundMoveListener;
@@ -32,6 +34,8 @@ public class ActionCanvas extends Canvas {
 
 	private Item[] items;
 	private int itemSize = 0;
+	
+	private int coolTime = 100;
 	/*
 	private static final int up = 1004; // ���������� ���� static
 	private static final int down = 1005;
@@ -46,7 +50,7 @@ public class ActionCanvas extends Canvas {
 			
 			@Override
 			public void onMove() {
-				System.out.println("오호라디야~~");
+				//System.out.println("오호라디야~~");
 			}
 		});
 
@@ -98,11 +102,17 @@ public class ActionCanvas extends Canvas {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				for(int i=0; i<3; i++)
-					if(boys[i].isSelected(e.getX(), e.getY())) {
-						currentBoy = boys[i];
-					}
-				currentBoy.move(e.getX(), e.getY());
+				
+				if(coolTime <0) {
+					System.out.println("마우스 눌림");
+					coolTime = 100;
+					for(int i=0; i<3; i++)
+						if(boys[i].isSelected(e.getX(), e.getY())) {
+							currentBoy = boys[i];
+						}
+					currentBoy.move(e.getX(), e.getY());
+				}
+				
 				//System.out.println(e.getX());
 				repaint();
 			}
@@ -126,20 +136,18 @@ public class ActionCanvas extends Canvas {
 			}
 		});//인터페이스
 		
-		setFocusable(true);
+		setFocusable(true);//포커스를 잡아줘야 키 리스너가 작동함...... 안그럼 클릭하기전까지 포커스가 없음
 		addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
+			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				
-				if(currentBoy == null)
-					currentBoy = boy1;
 				currentBoy.upMove(e.getKeyCode());
-				System.out.println(e.getKeyCode());
+				//System.out.println(e.getKeyCode());
 			}
 			
 			@Override
@@ -166,7 +174,7 @@ public class ActionCanvas extends Canvas {
 					for(int i=0; i<itemSize; i++)
 						items[i].update();
 
-
+					coolTime--;
 
 					repaint();
 					// -> Canvas.update() : ����� -> Canvas.paint(g) -> �ٽ� �׸���
