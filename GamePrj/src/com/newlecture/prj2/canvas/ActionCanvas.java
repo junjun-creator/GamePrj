@@ -12,7 +12,7 @@ import com.newlecture.prj2.service.BoyService;
 public class ActionCanvas extends Canvas {
 
 
-	private Boy boy;//Äµ¹ö½º¿¡ ÀÏ´Ü °³Ã¼¸¦ ±×·Á³õ°í ÇàÀ§¸¦ ½ÃÅ²´Ù.
+	private Boy boy;//Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½×·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å²ï¿½ï¿½.
 	private BoyService boys;
 	private Boy currentBoy;
 	public static Canvas instance;
