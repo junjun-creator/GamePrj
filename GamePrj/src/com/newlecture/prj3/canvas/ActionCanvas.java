@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashSet;
@@ -36,6 +37,8 @@ public class ActionCanvas extends Canvas {
 	private int itemSize = 0;
 	
 	private int coolTime = 100;
+	//private Missile[] missiles;
+	int missileSize = 0;
 	/*
 	private static final int up = 1004; // ���������� ���� static
 	private static final int down = 1005;
@@ -92,13 +95,7 @@ public class ActionCanvas extends Canvas {
 		});
 		
 		
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+		addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -116,24 +113,6 @@ public class ActionCanvas extends Canvas {
 				//System.out.println(e.getX());
 				repaint();
 			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
 		});//인터페이스
 		
 		setFocusable(true);//포커스를 잡아줘야 키 리스너가 작동함...... 안그럼 클릭하기전까지 포커스가 없음
@@ -146,8 +125,22 @@ public class ActionCanvas extends Canvas {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				currentBoy.upMove(e.getKeyCode());
+				int code = e.getKeyCode();
+				//if(e.getKeyCode() >=37 && e.getKeyCode() <=40)
+				//	currentBoy.upMove(e.getKeyCode());
 				//System.out.println(e.getKeyCode());
+				
+				switch(code) {
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_UP:
+				case KeyEvent.VK_DOWN:
+					currentBoy.move(code);
+					break;
+				case KeyEvent.VK_SPACE:
+					//Missile missile = currentBoy.fire();
+					break;
+				}
 			}
 			
 			@Override
