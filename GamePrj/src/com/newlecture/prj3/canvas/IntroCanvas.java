@@ -41,7 +41,7 @@ public class IntroCanvas extends Canvas {
 					//if(buttons[i].contains(x,y)) {
 						//JOptionPane.showMessageDialog(IntroCanvas.this, "clicked : "+i);//그냥 this 하게되면 MouseAdapter를 가리킴
 				try {
-					GameFrame.instance.switchCanvas(IntroCanvas.this, ActionCanvas.class);
+					GameFrame.instance.switchCanvas(IntroCanvas.this, ActionCanvas.class);//class 정보를 넘겨준다
 				} catch (InstantiationException e1) {
 					// TODO Auto-generated catch block
 					System.out.println(1);

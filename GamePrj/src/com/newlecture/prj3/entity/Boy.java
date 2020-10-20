@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.newlecture.prj3.canvas.ActionCanvas;
+import com.newlecture.prj3.canvas.Missile;
 
 public class Boy extends Item {
 
@@ -272,5 +273,17 @@ public class Boy extends Item {
 			W = 0;
 			break;
 		}
+	}
+
+	public Missile fire() {
+		
+		double x = getX();
+		double y = getY();
+		
+		Missile missile = new Missile();
+		missile.setX(x+20);
+		missile.setY(y-10);
+		
+		return missile;
 	}
 }

@@ -37,7 +37,7 @@ public class ActionCanvas extends Canvas {
 	private int itemSize = 0;
 	
 	private int coolTime = 100;
-	//private Missile[] missiles;
+	private Missile[] missiles;
 	int missileSize = 0;
 	/*
 	private static final int up = 1004; // ���������� ���� static
@@ -77,6 +77,7 @@ public class ActionCanvas extends Canvas {
 		items[3] = boy3;
 		items[4] = enemy;
 		itemSize = 5;
+		missiles = new Missile[100];
 
 		currentBoy = boy1;
 		
@@ -138,7 +139,8 @@ public class ActionCanvas extends Canvas {
 					currentBoy.move(code);
 					break;
 				case KeyEvent.VK_SPACE:
-					//Missile missile = currentBoy.fire();
+					Missile missile = currentBoy.fire();
+					items[itemSize++] = missile;
 					break;
 				}
 			}

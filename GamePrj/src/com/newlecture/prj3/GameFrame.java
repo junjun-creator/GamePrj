@@ -67,11 +67,12 @@ public class GameFrame extends Frame {
 		//add((Canvas)newCanvas.newInstance());
 		
 		//스타트를 시켜줄까? 아니면 알아서 스타트 하게끔 할까?
-		Canvas canvas = (Canvas)newCanvas.newInstance();
+		Canvas canvas = (Canvas)newCanvas.newInstance();//객체를 생성
 		add(canvas);
 		canvas.setFocusable(true);//포커스를 가질수 있게 함.
 		canvas.requestFocus();//잡을 포커스가 하나밖에 없을 경우에는 request하지 않아도 알아서 포커스를 잡는다.
 		// 하지만 확실한 포커싱을 위해 setFocusable, requestFocus를 수행해주자!
+		
 		if(canvas instanceof ActionCanvas) {
 			((ActionCanvas)canvas).start();//여기서 스타트를 시켜줌. 형변환보다 메소드 호출하는 . 이 우선순위가 더 높으므로 괄호를 해줘야함
 			//((ActionCanvas)canvas).requestFocus();

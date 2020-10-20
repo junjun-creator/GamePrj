@@ -11,7 +11,9 @@ import java.util.Scanner;
 public class ClientProgram {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		Socket sock = new Socket("192.168.0.64", 10000);
+		
+		
+		/*Socket sock = new Socket("192.168.0.64", 10000);
 	      OutputStream nos = sock.getOutputStream();
 	      InputStream nis = sock.getInputStream();
 	      
@@ -33,8 +35,11 @@ public class ClientProgram {
 	      nis.close();
 	      nos.close();
 	      sock.close();
-		
+		*/
 		//System.out.println("connect to "+ sock.getRemoteSocketAddress());
+	
+		ClientFrame cf = new ClientFrame();
+		cf.setVisible(true);
 	}
 
 }
