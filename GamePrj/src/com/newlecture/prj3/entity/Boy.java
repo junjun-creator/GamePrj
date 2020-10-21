@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.newlecture.prj3.canvas.ActionCanvas;
-import com.newlecture.prj3.canvas.Missile;
+
 
 public class Boy extends Item {
 

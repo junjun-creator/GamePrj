@@ -1,5 +1,6 @@
-package com.newlecture.prj3.canvas;
+package com.newlecture.prj3.entity;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -7,10 +8,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.newlecture.prj3.canvas.ActionCanvas;
 import com.newlecture.prj3.entity.Item;
 
 public class Missile extends Item {
 	
+	private MissileListener listener;
 	private static Image img;
 	
 	static {//스태틱 생성자. 프로그램이 로드 될때 딱 한번만 수행되는 전역 생성자
@@ -27,7 +30,7 @@ public class Missile extends Item {
 	}
 	
 	public Missile(double x, double y) {
-		super(x, y, img.getWidth(null)/3, img.getHeight(null), 
+		super(x, y, 40, 40, 
 				"res/missile.png");
 	}
 	
@@ -39,8 +42,10 @@ public class Missile extends Item {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		
+		onOut();
+		
+		setY(getY()+1);
 	}
 
 	@Override
@@ -57,8 +62,18 @@ public class Missile extends Item {
 		double vx = getVx();
 		double vy = getVy();
 		
-		g.drawImage(img, x1, y1, x2, y2, 
-				0, 0, 0+w, h, ActionCanvas.instance);
+		//g.drawImage(img, x1, y1, x2, y2, 
+		//		0, 0, 0+w, h, ActionCanvas.instance);
+		g.setColor(Color.RED);
+		g.fillOval(x1, y1, w, h);
+	}
+	
+	public MissileListener getListener() {
+		return listener;
+	}
+
+	public void setListener(MissileListener listener) {
+		this.listener = listener;
 	}
 
 }
