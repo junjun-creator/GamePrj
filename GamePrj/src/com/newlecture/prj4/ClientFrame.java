@@ -9,8 +9,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -33,6 +37,9 @@ public class ClientFrame extends JFrame {
 	
 	private Socket socket;
 	
+	private Scanner nscan;
+	private PrintStream nout;
+	
 	public ClientFrame() {
 		
 		btnSend = new Button("send");
@@ -41,6 +48,15 @@ public class ClientFrame extends JFrame {
 		
 		panel = new ChatPanel();
 		panel.setPreferredSize(new Dimension(300,0));
+		panel.setListener(new btnEventListener() {
+			
+			@Override
+			public void onSend(String chatMsg) {
+				// TODO Auto-generated method stub
+				panel.setOutputText("\n"+chatMsg);
+				
+			}
+		});
 		add(panel,BorderLayout.LINE_END);
 		
 		
@@ -72,6 +88,24 @@ public class ClientFrame extends JFrame {
 					socket = new Socket("192.168.0.70",10000);
 					
 					if(socket.isConnected()) {
+						InputStream nis = socket.getInputStream();
+						OutputStream nos = socket.getOutputStream();
+						
+						nscan = new Scanner(nis);
+						nout = new PrintStream(nos);//연결되자마자 버퍼를 만들어서
+						
+						//메세지를 받기위해 대기해야함
+						
+						new Thread(new Runnable() {
+							@Override
+							public void run() {//다른 스레드에서 계속 메시지를 받아옴
+								while(nscan.hasNextLine()) {
+									String msg = nscan.nextLine();
+									panel.setOutputText("\n"+msg);
+								}
+							}
+						}).start();
+						
 						canvas.setActive();
 						
 						panel.setOutputText("서버에 연결되었습니다.");

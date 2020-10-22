@@ -43,7 +43,8 @@ public class Missile extends Item {
 	@Override
 	public void update() {
 		
-		onOut();
+		if(listener != null)
+			listener.onOut(this);
 		
 		setY(getY()+1);
 	}
