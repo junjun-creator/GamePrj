@@ -20,6 +20,7 @@ import com.newlecture.prj3.entity.EnemyMoveListener;
 import com.newlecture.prj3.entity.EnemyMoveListenerImpl;
 import com.newlecture.prj3.entity.Item;
 import com.newlecture.prj3.entity.Missile;
+import com.newlecture.prj3.entity.MissileListener;
 
 public class ActionCanvas extends Canvas {
 
@@ -141,7 +142,34 @@ public class ActionCanvas extends Canvas {
 					break;
 				case KeyEvent.VK_SPACE:
 					Missile missile = currentBoy.fire();
+					missile.setListener(new MissileListener() {
+						
+						@Override
+						public void onOut(Missile missile) {
+							int i;
+							for(i = 0;i<itemSize; i++) {
+								if(items[i] == missile) 
+									break;
+							}
+							for(int j=i;j<itemSize-1 ; j++) {
+								items[j] = items[j+1];
+							}
+							System.out.println(i);
+							
+							for(i = 0;i<missileSize ; i++) {
+								if(missiles[i] == missile)
+									break;
+							}
+							
+							for(int j=i;j<missileSize-1 ; j++) {
+								missiles[j] = missiles[j+1];
+							}
+							System.out.println(i);
+						}
+					});
+					
 					items[itemSize++] = missile;
+					missiles[missileSize++] = missile; 
 					break;
 				}
 			}
